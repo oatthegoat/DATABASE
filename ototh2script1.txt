@@ -1,0 +1,17 @@
+SHOW DATABASES;
+DROP DATABASE IF EXISTS ototh2assign2db;
+CREATE DATABASE ototh2assign2db;
+USE ototh2assign2db;
+-- Grant privileges
+GRANT USAGE ON *.* TO 'ta'@'localhost';
+DROP USER 'ta'@'localhost';
+CREATE USER 'ta'@'localhost' IDENTIFIED BY 'cs3319';
+GRANT ALL PRIVILEGES ON ototh2assign2db.* TO 'ta'@'localhost';
+FLUSH PRIVILEGES;
+SHOW TABLES;
+-- Create tables for OHIP's database
+CREATE TABLE patients (OHIPnumber INT NOT NULL, firstName VARCHAR(20), lastName VARCHAR(20), PRIMARY KEY(OHIPnumber));
+CREATE TABLE doctors (licenseNumber CHAR(4) NOT NULL, firstName VARCHAR(20), lastName VARCHAR(20), specialization VARCHAR(30), dateLicensed DATE, hospitalCode CHAR(3), PRIMARY KEY(licenseNumber));
+CREATE TABLE hospitals (hospitalCode CHAR(3) NOT NULL, name VARCHAR(20), city VARCHAR(20), province CHAR(2), beds INT, licenseNumber VARCHAR(4), dateStarted DATE, PRIMARY KEY(hospitalCode), FOREIGN KEY(licenseNumber) REFERENCES doctors(licenseNumber));
+CREATE TABLE treats (OHIPNumber INT, licenseNumber VARCHAR(4), FOREIGN KEY(OHIPnumber) REFERENCES patients (OHIPnumber), FOREIGN KEY (licenseNumber) REFERENCES doctors (licenseNumber) ON DELETE CASCADE);
+SHOW TABLES;

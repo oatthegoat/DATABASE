@@ -1,0 +1,28 @@
+USE ototh2assign2db;
+-- Query 1
+SELECT lastName FROM patients;
+-- Query 2
+SELECT DISTINCT lastName FROM patients;
+-- Query 3
+SELECT * from doctors ORDER BY lastName;
+-- Query 4
+SELECT name, hospitalCode FROM hospitals WHERE beds>1500;
+-- Query 5
+SELECT lastName, firstName FROM doctors, hospitals WHERE doctors.hospitalCode=hospitals.hospitalCode AND hospitals.name='St. Joseph';
+-- Query 6
+SELECT firstName, lastName FROM patients WHERE lastName like 'G%';
+-- Query 7
+SELECT patients.firstName, patients.lastName FROM patients, doctors, treats WHERE patients.OHIPnumber=treats.OHIPnumber AND doctors.licenseNumber=treats.licenseNumber AND doctors.lastName='Clooney';
+-- Query 8
+SELECT name, city, lastName FROM hospitals, doctors WHERE hospitals.licenseNumber=doctors.licenseNumber;
+-- Query 9
+SELECT SUM(beds) AS `Total Number of Beds` FROM hospitals;
+-- Query 10
+SELECT patients.firstName, doctors.firstName FROM patients, doctors, hospitals, treats WHERE treats.OHIPnumber=patients.OHIPnumber AND treats.licenseNumber=doctors.licenseNumber AND doctors.licenseNumber=hospitals.licenseNumber;
+-- Query 11
+SELECT lastName, firstName FROM doctors, hospitals WHERE doctors.specialization='Surgeon' AND doctors.hospitalCode=hospitals.hospitalCode AND name='Victoria';
+-- Query 12
+SELECT firstName FROM doctors WHERE licenseNumber NOT IN (SELECT licenseNumber FROM treats);
+-- Query 13
+-- This table looks much better without repeats so I used select distinct
+SELECT DISTINCT doctors.lastName, doctors.firstName FROM doctors, treats WHERE doctors.licenseNumber IN (SELECT treats.licenseNumber FROM treats GROUP BY licenseNumber HAVING COUNT(*) > 1);

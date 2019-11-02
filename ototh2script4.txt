@@ -1,0 +1,23 @@
+USE ototh2assign2db;
+DELETE FROM doctors WHERE dateLicensed < '1965-01-01';
+-- You can see that no doctors were deleted because both doctors who were licensed before this date are heads of the hospitals they work at, and their license number is used as a foreign key in the hospitals table
+SELECT * FROM doctors;
+-- The doctors are still here as well
+SELECT * FROM treats;
+-- And here
+SELECT * FROM hospitals;
+CREATE VIEW `view1` AS SELECT patients.firstName, patients.lastName, doctors.lastName AS doctor, hospitals.name FROM patients, doctors, hospitals, treats WHERE patients.OHIPnumber=treats.OHIPnumber AND doctors.licenseNumber=treats.licenseNumber AND doctors.licenseNumber=hospitals.licenseNumber AND hospitals.dateStarted > '1995-12-31';
+SELECT * from view1;
+-- I can show that it worked by just doing the select as well
+SELECT patients.firstName, patients.lastName, doctors.lastName AS doctor, hospitals.name FROM patients, doctors, hospitals, treats WHERE patients.OHIPnumber=treats.OHIPnumber AND doctors.licenseNumber=treats.licenseNumber AND doctors.licenseNumber=hospitals.licenseNumber AND hospitals.dateStarted > '1995-12-31';
+SELECT * FROM doctors;
+SELECT * FROM treats;
+DELETE FROM doctors where lastName='Clooney';
+-- Clooney is no longer in the doctors table
+SELECT * FROM doctors;
+-- The records of patients being treated by Clooney are deleted due to the delete cascade
+SELECT * FROM treats;
+SELECT * FROM doctors;
+DELETE FROM doctors WHERE specialization='Surgeon';
+-- The delete command did not delete the rows because one surgeon is head of their hospitals and since the hospitals table uses the doctor's license numbers as a foreign key, that field cannot have a reference to something that doesn't exist
+
